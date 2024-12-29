@@ -1,7 +1,6 @@
 import { useAppDispatch } from "@/app/hooks"
 import React from "react"
-import { Post, postAdded } from "./postsSlice"
-import { nanoid } from "@reduxjs/toolkit"
+import { postAdded } from "./postsSlice"
 
 interface AddPostFormFields extends HTMLFormControlsCollection {
 	postTitle: HTMLInputElement
