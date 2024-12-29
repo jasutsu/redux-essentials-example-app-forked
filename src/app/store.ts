@@ -1,19 +1,9 @@
-import { Action, configureStore } from "@reduxjs/toolkit"
-
-interface CounterState {
-	value: number
-}
-
-const counterReducer = (state: CounterState = { value: 0 }, action: Action) => {
-	switch(action.type) {
-		default:
-			return state
-	}
-}
+import { configureStore } from "@reduxjs/toolkit"
+import postsReducer from '@/features/posts/postsSlice'
 
 export const store = configureStore({
 	reducer: {
-		counter: counterReducer
+		posts: postsReducer
 	}
 })
 
