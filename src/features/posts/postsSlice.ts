@@ -10,7 +10,7 @@ export interface Post {
 const initialState: Post[] = [
 	{
 		id: '1', title: 'First Post', content:
-		`
+			`
 		Hello API, Lorem ipsum dolor sit amet consectetur adipisicing elit. 
 		Iste praesentium, nihil ipsa possimus veniam totam suscipit eveniet, 
 		consequatur harum quae hic, eum laudantium culpa odit explicabo sequi 
@@ -21,7 +21,7 @@ const initialState: Post[] = [
 	},
 	{
 		id: '2', title: 'Second Post!', content:
-		`
+			`
 		Harum consectetur nobis provident iure eaque debitis eligendi Hello
 		API, Lorem ipsum dolor sit amet consectetur adipisicing elit. 
 		Iste praesentium, nihil ipsa possimus veniam totam suscipit eveniet, 
@@ -39,7 +39,7 @@ const postsSlice = createSlice({
 		postAdded: {
 			prepare(title: string, content: string) {
 				return {
-					payload: {id: nanoid(), title, content}
+					payload: { id: nanoid(), title, content }
 				}
 			},
 			reducer(state, action: PayloadAction<Post>) {
@@ -49,19 +49,21 @@ const postsSlice = createSlice({
 		postUpdated(state, action: PayloadAction<Post>) {
 			const { id, title, content } = action.payload
 			const existingPost = state.find(post => post.id === id)
-			if(existingPost) {
+			if (existingPost) {
 				existingPost.title = title
 				existingPost.content = content
 			}
 		}
+	},
+	selectors: {
+		selectAllPosts: (postsState) => postsState,
+		selectPostById: (postsState, postId: string) => (
+			postsState.find((post) => post.id === postId)
+		)
 	}
 })
 
 export const { postAdded, postUpdated } = postsSlice.actions
-
-export const selectAllPosts = (state: RootState) => state.posts;
-export const selectPostById = (state: RootState, postId: string) => (
-	state.posts.find((post) => post.id === postId)
-)
+export const { selectAllPosts, selectPostById } = postsSlice.selectors
 
 export default postsSlice.reducer
