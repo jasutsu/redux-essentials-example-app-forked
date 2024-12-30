@@ -5,7 +5,10 @@ export interface Post {
 	id: string
 	title: string
 	content: string
+	user: string
 }
+
+type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
 
 const initialState: Post[] = [
 	{
@@ -17,7 +20,8 @@ const initialState: Post[] = [
 		officia magnam atque molestiae? Harum consectetur nobis provident 
 		iure eaque debitis eligendi dolores magni hic accusantium neque odit 
 		eum, facilis earum laborum unde.
-		`
+		`,
+		user: '0'
 	},
 	{
 		id: '2', title: 'Second Post!', content:
@@ -28,7 +32,8 @@ const initialState: Post[] = [
 		consequatur harum quae hic, eum laudantium culpa odit explicabo sequi 
 		officia magnam atque molestiae? dolores magni hic accusantium neque odit 
 		eum, facilis earum laborum unde.
-		`
+		`,
+		user: '2'
 	},
 ]
 
@@ -37,16 +42,16 @@ const postsSlice = createSlice({
 	initialState,
 	reducers: {
 		postAdded: {
-			prepare(title: string, content: string) {
+			prepare(title: string, content: string, userId: string) {
 				return {
-					payload: { id: nanoid(), title, content }
+					payload: { id: nanoid(), title, content, user: userId }
 				}
 			},
 			reducer(state, action: PayloadAction<Post>) {
 				state.push(action.payload)
 			},
 		},
-		postUpdated(state, action: PayloadAction<Post>) {
+		postUpdated(state, action: PayloadAction<PostUpdate>) {
 			const { id, title, content } = action.payload
 			const existingPost = state.find(post => post.id === id)
 			if (existingPost) {
