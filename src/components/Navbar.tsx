@@ -9,7 +9,7 @@ export const Navbar = () => {
 	const dispatch = useAppDispatch()
 	const user = useAppSelector(selectCurrentUser)
 
-	const isLoggedIn: boolean = !user
+	const isLoggedIn: boolean = !!user
 
 	let navContent: React.ReactNode = null
 

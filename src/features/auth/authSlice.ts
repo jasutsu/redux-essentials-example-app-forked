@@ -5,7 +5,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-	username: 'Jim Hopper' // null
+	username: '2' // null
 }
 
 const authSlice = createSlice({
