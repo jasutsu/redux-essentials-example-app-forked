@@ -1,8 +1,7 @@
 import { useAppSelector } from "@/app/hooks"
 import { Link } from "react-router-dom"
 import { selectAllPosts } from "./postsSlice"
-import { PostAuthor } from "./PostAuthor"
-import { TimeAgo } from "@/components/TimeAgo"
+import { PostMetaData } from "./PostMetaData"
 
 export const PostsList = () => {
 	const posts = useAppSelector(selectAllPosts)
@@ -14,8 +13,7 @@ export const PostsList = () => {
 				<Link to={`posts/${post.id}`}>{post.title}</Link>
 			</h3>
 			<p className="post-content">{post.content.substring(0, 100)}</p>
-			<PostAuthor userId={post.user} />
-			<TimeAgo timestamp={post.date} />
+			<PostMetaData post={post} />
 		</article>
 	))
 
