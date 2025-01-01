@@ -123,11 +123,12 @@ const postsSlice = createSlice({
 		selectPostById: (state, postId: string) => (
 			state.posts.find((post) => post.id === postId)
 		),
-		selectPostsStatus: (state) => state.status
+		selectPostsStatus: (state) => state.status,
+		selectPostsError: (state) => state.error,
 	}
 })
 
 export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
-export const { selectAllPosts, selectPostById, selectPostsStatus } = postsSlice.selectors
+export const { selectAllPosts, selectPostById, selectPostsStatus, selectPostsError } = postsSlice.selectors
 
 export default postsSlice.reducer
