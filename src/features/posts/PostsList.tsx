@@ -1,10 +1,19 @@
-import { useAppSelector } from "@/app/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { Link } from "react-router-dom"
-import { selectAllPosts } from "./postsSlice"
+import { fetchPosts, selectAllPosts, selectPostsStatus } from "./postsSlice"
 import { PostMetaData } from "./PostMetaData"
+import { useEffect } from "react"
 
 export const PostsList = () => {
+	const dispatch = useAppDispatch()
 	const posts = useAppSelector(selectAllPosts)
+	const postsStatus = useAppSelector(selectPostsStatus)
+
+	useEffect(() => {
+		if(postsStatus === "idle") {
+			dispatch(fetchPosts())
+		}
+	}, [postsStatus, dispatch])
 	
 	const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 	const renderedPosts = orderedPosts.map((post) => (
