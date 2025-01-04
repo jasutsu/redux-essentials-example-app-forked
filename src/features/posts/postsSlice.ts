@@ -1,6 +1,4 @@
-import { RootState } from "@/app/store"
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit"
-import { sub } from "date-fns"
 import { userLoggedOut } from "../auth/authSlice"
 import { createAppAsyncThunk } from "@/app/withTypes"
 import { client } from "@/api/client"
@@ -25,6 +23,15 @@ export interface Post {
 }
 
 type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
+type NewPost = Pick<Post, 'title' | 'content' | 'user'>
+
+export const addNewPost = createAppAsyncThunk(
+	'posts/addNewPost',
+	async (initialPost: NewPost) => {
+		const response = await client.post<Post>('/fakeApi/posts', initialPost)
+		return response.data
+	}
+)
 
 const initalReactions: Reactions = {
 	thumbsUp: 0,
@@ -49,7 +56,7 @@ export const fetchPosts = createAppAsyncThunk(
 	{
 		condition(arg, thunkApi) {
 			const postsStatus = selectPostsStatus(thunkApi.getState())
-			if(postsStatus !== "idle") {
+			if (postsStatus !== "idle") {
 				return false
 			}
 		}
@@ -117,6 +124,9 @@ const postsSlice = createSlice({
 				state.status = "failed"
 				state.error = action.error.message ?? "Error on posts fetch request"
 			})
+			.addCase(addNewPost.fulfilled, (state, action) => {
+				state.posts.push(action.payload)
+			})
 	},
 	selectors: {
 		selectAllPosts: (state) => state.posts,
@@ -125,10 +135,21 @@ const postsSlice = createSlice({
 		),
 		selectPostsStatus: (state) => state.status,
 		selectPostsError: (state) => state.error,
+		selectPostsByUser: (state, userId: string) => {
+			const allPosts = selectAllPosts({ posts: state })
+			return allPosts.filter((post) => post.user === userId)
+		}
 	}
 })
 
-export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
-export const { selectAllPosts, selectPostById, selectPostsStatus, selectPostsError } = postsSlice.selectors
+export const { postUpdated, reactionAdded } = postsSlice.actions
+export const {
+	selectAllPosts,
+	selectPostById,
+	selectPostsStatus,
+	selectPostsError,
+	selectPostsByUser,
+}
+	= postsSlice.selectors
 
 export default postsSlice.reducer
