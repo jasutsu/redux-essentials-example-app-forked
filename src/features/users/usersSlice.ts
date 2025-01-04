@@ -29,15 +29,12 @@ const usersSlice = createSlice({
 				return action.payload
 			})
 	},
-	selectors: {
-		selectAllUsers: (usersState) => usersState,
-		selectUserById: (usersState, userId: string | null) => (
-			usersState.find((user) => user.id === userId)
-		),
-	}
 })
 
-export const { selectAllUsers, selectUserById } = usersSlice.selectors
+export const selectAllUsers = (state: RootState) => state.users
+export const selectUserById = (state: RootState, userId: string) => (
+	state.users.find((user) => user.id === userId)
+)
 export const selectCurrentUser = (state: RootState) => {
 	const currentUsername = selectCurrentUsername(state)
 	return state.users[0]

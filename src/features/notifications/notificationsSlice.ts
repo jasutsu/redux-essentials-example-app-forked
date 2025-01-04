@@ -1,4 +1,5 @@
 import { client } from "@/api/client"
+import { RootState } from "@/app/store"
 import { createAppAsyncThunk } from "@/app/withTypes"
 import { createSlice } from "@reduxjs/toolkit"
 
@@ -34,11 +35,8 @@ const notificationsSlice = createSlice({
 				state.sort((a, b) => b.date.localeCompare(a.date))
 			})
 	},
-	selectors: {
-		selectAllNotifications: (state) => state
-	}
 })
 
-export const { selectAllNotifications } = notificationsSlice.selectors
+export const selectAllNotifications = (state: RootState) => state.notifications
 
 export default notificationsSlice.reducer

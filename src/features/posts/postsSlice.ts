@@ -2,6 +2,7 @@ import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit"
 import { userLoggedOut } from "../auth/authSlice"
 import { createAppAsyncThunk } from "@/app/withTypes"
 import { client } from "@/api/client"
+import { RootState } from "@/app/store"
 
 export interface Reactions {
 	thumbsUp: number
@@ -128,28 +129,19 @@ const postsSlice = createSlice({
 				state.posts.push(action.payload)
 			})
 	},
-	selectors: {
-		selectAllPosts: (state) => state.posts,
-		selectPostById: (state, postId: string) => (
-			state.posts.find((post) => post.id === postId)
-		),
-		selectPostsStatus: (state) => state.status,
-		selectPostsError: (state) => state.error,
-		selectPostsByUser: (state, userId: string) => {
-			const allPosts = selectAllPosts({ posts: state })
-			return allPosts.filter((post) => post.user === userId)
-		}
-	}
 })
 
-export const { postUpdated, reactionAdded } = postsSlice.actions
-export const {
-	selectAllPosts,
-	selectPostById,
-	selectPostsStatus,
-	selectPostsError,
-	selectPostsByUser,
+export const selectAllPosts = (state: RootState) => state.posts.posts
+export const selectPostById = (state: RootState, postId: string) => (
+	state.posts.posts.find((post) => post.id === postId)
+)
+export const selectPostsStatus = (state: RootState) => state.posts.status
+export const selectPostsError = (state: RootState) => state.posts.error
+export const selectPostsByUser = (state: RootState, userId: string) => {
+	const allPosts = selectAllPosts(state)
+	return allPosts.filter((post) => post.user === userId)
 }
-	= postsSlice.selectors
+
+export const { postUpdated, reactionAdded } = postsSlice.actions
 
 export default postsSlice.reducer
